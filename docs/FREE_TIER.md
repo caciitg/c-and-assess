@@ -6,11 +6,13 @@ On 4 September 2026, the owner approved deployment access but declined R2 activa
 
 The existing live Sites-managed deployment remains in place until an explicit, tested cutover. Creating a club database or storing a deployment credential does not move existing candidates, attempts, or image files.
 
+The owner approved a text-only first release. See [Text-only launch](TEXT_ONLY_LAUNCH.md) for rehearsal evidence and remaining cutover gates.
+
 ## Text-only club Worker
 
 Leave `CLOUDFLARE_R2_BUCKET` unset. The deployment renderer then emits no R2 binding, even when the build configuration contains one. D1 is still required.
 
-- Text-only CSV papers, registrations, attempts, scores and analysis can use the existing D1-backed implementation. A full staging rehearsal is still required before claiming readiness.
+- Text-only CSV papers, registrations, attempts, scores and analysis can use the existing D1-backed implementation. The core single-candidate staging rehearsal passed on 4 September; final-domain and capacity checks remain outstanding.
 - Leave every CSV `Image` cell blank. ZIP uploads and image-bearing imports receive a clear error instead of publishing a broken paper.
 - Image uploads need private object storage. We do not silently discard image references or put confidential question images in a public GitHub folder.
 - Do not migrate an image-based live assessment into text-only mode. Preserve the existing release or wait for image storage approval.
@@ -27,8 +29,6 @@ Leave `CLOUDFLARE_R2_BUCKET` unset. The deployment renderer then emits no R2 bin
 
 No scoring schema rewrite is required for this upgrade. Existing image routes and access checks remain in the code.
 
-## Deployment credential
+## Deployment access
 
-The account-owned deployment token expires on 4 December 2026. It has Workers Scripts write, D1 write, Account Settings read, and Workers Routes write restricted to `caciitg.com`. It has no Pages, R2, billing or account-member edit permission. Store it only in encrypted GitHub environment secrets. Rotate it before expiry; do not paste it into source, issues or documentation.
-
-Account-level Workers and D1 permissions can affect more than staging resources. Separate databases prevent accidental data mixing but do not turn this token into a staging-only security boundary. Require human approval for production deployments.
+Keep deployment credentials in encrypted secrets, never in source or documentation. Use least privilege, rotate credentials privately, and require human approval for production releases.
