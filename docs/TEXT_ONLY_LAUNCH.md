@@ -23,20 +23,27 @@ The deployment configuration tests also passed for staging without R2, productio
 
 These checks do not certify a large simultaneous event, server-only recovery, or a complete security audit. Staged load tests, backup/restore verification and final-domain testing remain release gates.
 
-## Existing data: cutover is not yet authorized as a fresh start
+## Existing data: fresh launch approved; old results preserved
 
-A read-only inventory on 4 September found six assessments and fourteen question rows on the existing Sites-managed live database. Two questions have image references. No data was changed or deleted. This inventory is not a database or object backup and does not establish how many historical attempts must be migrated.
+The owner approved a fresh text-only production database while retaining the old Sites-managed installation for previous results. Do not copy staging attempts into production, delete the old installation, or strip historical image references.
 
-Do not repoint `assess.caciitg.com` to an empty database merely because text-only mode is approved. First obtain the owner's choice:
+Archive entry point: https://caciitg-assess.siabatra.chatgpt.site/assessments
 
-1. Start a fresh text-only platform, preserving the old deployment and arranging verified access to old results separately; or
-2. Preserve assessment history on the final domain, requiring a migration and an explicit handling plan for the image-bearing assessments.
+Verified on 4 September through normal Google sign-in at that address: the existing candidate desk, two previously released reports (including PA Mock Test 1), scores and analysis. A released image question loaded successfully through its authenticated image endpoint (natural width 1920 pixels). Result access also survived a page refresh. These are sampled access checks, not a backup or proof of indefinite hosting availability.
 
-Never strip historical image references or delete old attempts to make migration pass. Do not assume the old deployment's alternate hostname supports OAuth or historical result access until tested. Keep its domain and data unchanged until this decision and the preservation plan are complete.
+Keep the archive's Google callback registered: https://caciitg-assess.siabatra.chatgpt.site/api/auth/callback/google. Users must sign in with the same Google account used for their original attempt. Old attempt links should use the archive hostname after cutover, not the fresh production hostname.
+
+The read-only live inventory contained six assessments and fourteen question rows, including two image references. The old database and storage were not modified. Before cutover, add a clearly labelled Previous results link on the new site, verify the archive again, and retain the old release as the rollback target.
+
+## Production preparation status
+
+The official repository now has a separate production environment with the existing production D1 selected, the intended hostname configured, no R2 variable, and a required club reviewer. Deployment credentials are kept only in encrypted secrets.
+
+The deployment workflow defaults to preparation: select production and leave attach_domain off. This creates the production Worker at its temporary workers.dev address without attaching the live hostname. Configure runtime OAuth and session secrets and complete preparation checks there. Only after the release gates pass, rerun with attach_domain on to perform the explicit domain cutover. Do not rerun preparation on an already-live Worker: it is an initial-launch step, not a rollback method.
 
 ## Next release steps
 
-1. Resolve the old-data decision above; inventory attempts and related tables without publishing candidate personal data.
+1. Follow the approved fresh-launch decision above; preserve old attempts and maintain access through the verified archive address.
 2. Back up the source data and record a tested restoration procedure. If starting fresh, preserve the old installation and explain where previous results remain accessible.
 3. Prepare the official repository's protected production environment, separate production D1, and runtime Google credentials and session secret. Do not reuse staging data as production data.
 4. Apply schema migrations before serving candidate requests; verify the production database and no-R2 configuration.

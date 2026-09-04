@@ -11,6 +11,11 @@ on:
         options:
           - staging
           - production
+      attach_domain:
+        description: Attach the live domain (production only; leave off for preparation)
+        required: true
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -56,6 +61,7 @@ jobs:
         run: node scripts/render_wrangler_config.mjs
         env:
           DEPLOYMENT_ENVIRONMENT: ${{ inputs.environment }}
+          ATTACH_PRODUCTION_DOMAIN: ${{ inputs.attach_domain && 'true' || 'false' }}
           CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_D1_DATABASE_ID: ${{ vars.CLOUDFLARE_D1_DATABASE_ID }}
           CLOUDFLARE_D1_DATABASE_NAME: ${{ vars.CLOUDFLARE_D1_DATABASE_NAME }}
@@ -81,3 +87,4 @@ jobs:
           echo "- Environment: ${{ inputs.environment }}" >> "$GITHUB_STEP_SUMMARY"
           echo "- Commit: ${{ github.sha }}" >> "$GITHUB_STEP_SUMMARY"
           echo "- Migrations: applied before code deployment" >> "$GITHUB_STEP_SUMMARY"
+

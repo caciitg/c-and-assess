@@ -10,6 +10,8 @@ if (missing.length) {
 const customDomain = process.env.CLOUDFLARE_CUSTOM_DOMAIN?.trim();
 const r2Bucket = process.env.CLOUDFLARE_R2_BUCKET?.trim();
 const production = process.env.DEPLOYMENT_ENVIRONMENT === 'production';
+// Default to preparation: attach the live hostname only after an explicit cutover.
+const attachProductionDomain = production && process.env.ATTACH_PRODUCTION_DOMAIN === 'true';
 
 if (production && !customDomain) {
   throw new Error('Production deployment requires CLOUDFLARE_CUSTOM_DOMAIN.');
@@ -22,7 +24,7 @@ const config = {
   name: production ? 'c-and-assess' : 'c-and-assess-staging',
   account_id: process.env.CLOUDFLARE_ACCOUNT_ID,
   main: 'index.js',
-  workers_dev: !production,
+  workers_dev: !attachProductionDomain,
   observability: { enabled: true },
   assets: { directory: '../client', binding: 'ASSETS' },
   d1_databases: [
@@ -35,7 +37,7 @@ const config = {
   ],
   // An omitted bucket deliberately enables text-only mode; never activate billing here.
   r2_buckets: r2Bucket ? [{ binding: 'FILES', bucket_name: r2Bucket }] : [],
-  routes: customDomain ? [{ pattern: customDomain, custom_domain: true }] : [],
+  routes: attachProductionDomain ? [{ pattern: customDomain, custom_domain: true }] : [],
 };
 
 delete config.dev;
@@ -45,3 +47,4 @@ delete config.topLevelName;
 const outputPath = resolve('dist/server/wrangler.deploy.jsonc');
 writeFileSync(outputPath, `${JSON.stringify(config, null, 2)}\n`, 'utf8');
 console.log(outputPath);
+
