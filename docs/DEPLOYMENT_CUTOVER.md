@@ -20,6 +20,8 @@ The repositories deploy independently. The main site contains only a normal HTTP
 
 R2 is optional and deferred by the owner. With no bucket configured, the club Worker is text-only. The existing Sites-managed deployment is not changed by this staging setup. See [Free-tier operation](FREE_TIER.md) before any public cutover.
 
+The approved first release is text-only. Follow [Text-only launch](TEXT_ONLY_LAUNCH.md) for current evidence and the unresolved historical-data decision. Do not attach the production domain to an empty database without resolving that decision.
+
 ## One-time Cloudflare and GitHub setup
 
 1. Keep the existing `caciitg` Pages project connected to `caciitg/devops` on `main`.
@@ -45,8 +47,8 @@ Google credentials and `AUTH_SECRET` are Worker runtime secrets. Add `GOOGLE_CLI
 
 1. Run `Deploy C&Assess Worker` with `staging` selected. This deploys to `workers.dev` without touching the production hostname.
 2. Add staging-only OAuth credentials and test the temporary URL. Use a separate staging database where possible.
-3. Verify public pages, sign-in, organizer authorization, CSV plus image publishing, registration, attempt recovery, submission, result generation, release and candidate analysis.
-4. Record D1 row counts and R2 object counts. Run the 200-user rehearsal, then 500 and 1,000. Run 4,000 only after the smaller stages stay healthy.
+3. Verify public pages, sign-in, organizer authorization, text-only CSV publishing (leave Image cells blank), registration, attempt recovery, submission, result generation, release and candidate analysis.
+4. Record D1 row counts. Image tests and R2 object checks are deferred while R2 is inactive. Plan staged load tests within a separately reviewed Free-plan request/write budget; do not assume 4,000 candidates are supported or upgrade billing automatically.
 5. Back up D1 and record the last-known-good Worker deployment.
 
 ## Production cutover
