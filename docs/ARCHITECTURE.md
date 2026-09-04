@@ -58,7 +58,7 @@ The existing caciitg.com website remains an independent Cloudflare Pages project
 
 ## Prepared future shape
 
-The locked target is a club-owned Cloudflare Worker deployed from `Hermes-25/c-and-assess` by GitHub Actions, with a club D1 database and private R2 bucket. That cutover is a change of infrastructure ownership, not a product rewrite. Binding names stay DB and FILES.
+The locked target is a club-owned Cloudflare Worker deployed from `caciitg/c-and-assess` by GitHub Actions, with a club D1 database and an optional private R2 bucket (billing deferred). That cutover is a change of infrastructure ownership, not a product rewrite. Binding names stay DB and FILES.
 
 The move is deliberately gated by a narrowly scoped deploy token, data migration, backup, monitoring and final-infrastructure load tests. R2 activation is deferred: no bucket means text-only papers, with image uploads and image-bearing imports rejected safely. Image-based assessments must remain on their existing deployment until private storage and image migration are approved. See [Free-tier operation](FREE_TIER.md) and [Club Cloudflare cutover](DEPLOYMENT_CUTOVER.md).
 

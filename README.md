@@ -13,11 +13,17 @@
 
   <br /><br />
 
-  [![CI](https://github.com/Hermes-25/c-and-assess/actions/workflows/ci.yml/badge.svg)](https://github.com/Hermes-25/c-and-assess/actions/workflows/ci.yml)
-  [![CodeQL](https://github.com/Hermes-25/c-and-assess/actions/workflows/codeql.yml/badge.svg)](https://github.com/Hermes-25/c-and-assess/actions/workflows/codeql.yml)
+  [![CI](https://github.com/caciitg/c-and-assess/actions/workflows/ci.yml/badge.svg)](https://github.com/caciitg/c-and-assess/actions/workflows/ci.yml)
+  [![CodeQL](https://github.com/caciitg/c-and-assess/actions/workflows/codeql.yml/badge.svg)](https://github.com/caciitg/c-and-assess/actions/workflows/codeql.yml)
   [![License: MIT](https://img.shields.io/badge/Code-MIT-6f35e8.svg)](LICENSE)
   [![Built for C&A IITG](https://img.shields.io/badge/Built_for-C%26A_IIT_Guwahati-111111.svg)](https://caciitg.com)
 </div>
+
+## Official repository and portfolio fork
+
+The official, club-owned source is [caciitg/c-and-assess](https://github.com/caciitg/c-and-assess). [Hermes-25/c-and-assess](https://github.com/Hermes-25/c-and-assess) is Abhishek Das’s personal portfolio and contribution fork—not the deployment source. Original authorship and commit history are preserved.
+
+See [Ownership and handover](docs/OWNERSHIP.md) for how to contribute, deploy and pass the project to future club teams.
 
 ## The short version
 
@@ -142,7 +148,7 @@ The repository also includes an offline/locally emulated **4,000-candidate × 60
 ### Start
 
 ```bash
-git clone https://github.com/Hermes-25/c-and-assess.git
+git clone https://github.com/caciitg/c-and-assess.git
 cd c-and-assess
 npm ci
 cp .env.example .env.local

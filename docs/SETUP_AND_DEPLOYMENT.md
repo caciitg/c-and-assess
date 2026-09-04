@@ -12,7 +12,7 @@ This guide is for a future maintainer creating a fresh C&Assess instance.
 
 ## 2. Install
 
-    git clone https://github.com/Hermes-25/c-and-assess.git
+    git clone https://github.com/caciitg/c-and-assess.git
     cd c-and-assess
     npm ci
     cp .env.example .env.local

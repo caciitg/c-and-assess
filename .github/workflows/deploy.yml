@@ -21,6 +21,8 @@ concurrency:
 
 jobs:
   deploy:
+    # Portfolio forks must not deploy club infrastructure.
+    if: github.repository == 'caciitg/c-and-assess'
     name: Verify, migrate and deploy
     runs-on: ubuntu-latest
     timeout-minutes: 25

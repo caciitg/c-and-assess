@@ -9,7 +9,7 @@ caciitg/devops --Cloudflare GitHub App--> Cloudflare Pages --> caciitg.com
                                                                |
                                                          Take Assessment
                                                                v
-Hermes-25/c-and-assess --GitHub Actions--> Club Cloudflare Worker
+caciitg/c-and-assess --GitHub Actions--> Club Cloudflare Worker
                                                                |
                                                         assess.caciitg.com
                                                            /   |   \
@@ -27,7 +27,7 @@ R2 is optional and deferred by the owner. With no bucket configured, the club Wo
 3. Use the existing D1 database `caciitg-assess-production` or create a replacement before the first real event.
 4. Leave R2 inactive for now. Do not supply `CLOUDFLARE_R2_BUCKET`. Only after separate billing approval, create private buckets and add that setting to enable images.
 5. Create a narrowly scoped Cloudflare API token for GitHub Actions. It needs Worker Scripts edit, D1 edit, Workers Routes edit and account read for this account. Do not use the Global API Key.
-6. Create GitHub environments named `staging` and `production` in `Hermes-25/c-and-assess`. Require a reviewer for `production`.
+6. Create GitHub environments named `staging` and `production` in `caciitg/c-and-assess`. Require a reviewer for `production`.
 7. Add the settings below to both environments. Prefer separate staging resources.
 
 | GitHub setting | Kind | Value |

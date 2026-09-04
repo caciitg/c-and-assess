@@ -5,7 +5,7 @@ type: software
 authors:
   - family-names: "Das"
     given-names: "Abhishek"
-repository-code: "https://github.com/Hermes-25/c-and-assess"
+repository-code: "https://github.com/caciitg/c-and-assess"
 url: "https://assess.caciitg.com"
 version: 1.0.0
 date-released: 2026-09-03
