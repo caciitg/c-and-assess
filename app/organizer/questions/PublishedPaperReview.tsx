@@ -4,6 +4,8 @@ import { FormEvent,useMemo,useState } from 'react';
 import { StructuredVisual } from '../../_components/StructuredVisual';
 import { usePendingNavigationGuard } from '../../_components/usePendingNavigationGuard';
 import { visualFromAuthorInput,visualFromStorage,visualInputHelp,visualKinds,visualToAuthorSource } from '../../../lib/structured-visual';
+import type { VisualKind } from '../../../lib/structured-visual';
+import { LocalOcrAssistant } from './LocalOcrAssistant';
 
 export type PublishedQuestion={id:string;position:number;type:string;prompt:string;passage:string;options_json:string;answers_json:string;solution:string;marks:number;negative_marks:number;topic:string;subtopic:string;difficulty:string;image_key:string|null;visual_kind:string|null;visual_spec_json:string|null;visual_alt_text:string};
 const json=(value:string)=>{try{return JSON.parse(value||'[]') as string[];}catch{return [];}};
@@ -20,10 +22,11 @@ export function PublishedPaperReview({initial,status}:{initial:PublishedQuestion
   const [visualSource,setVisualSource]=useState('');
   const [visualAltText,setVisualAltText]=useState('');
   const [visualVerified,setVisualVerified]=useState(false);
+  const [ocrBusy,setOcrBusy]=useState(false);
   const locked=['live','ended','results_processing','results_ready','results_released','archived'].includes(status);
   const imageCount=questions.filter((question)=>Boolean(question.image_key)).length;
   const visualCount=questions.filter((question)=>Boolean(question.visual_kind)).length;
-  usePendingNavigationGuard(Boolean(editing)&&(editorDirty||saving),'This question has changes that are not safely saved yet. Leave the organizer workspace anyway?');
+  usePendingNavigationGuard(Boolean(editing)&&(editorDirty||saving||ocrBusy),'This question has changes or local OCR work that are not safely saved yet. Leave the organizer workspace anyway?');
 
   const draft=useMemo(()=>{if(!visualKind)return {visual:null,error:''};try{return {visual:visualFromAuthorInput(visualKind,visualSource,visualAltText).visual,error:''};}catch(reason){return {visual:null,error:reason instanceof Error?reason.message:'Check the visual data.'};}},[visualAltText,visualKind,visualSource]);
   const help=visualInputHelp(visualKind);
@@ -35,7 +38,7 @@ export function PublishedPaperReview({initial,status}:{initial:PublishedQuestion
     setEditing(question);setEditorDirty(false);setImageFile(null);setRemoveImage(false);setMessage('');
     setVisualKind(visual?.kind||'');setVisualSource(visualToAuthorSource(visual));setVisualAltText(visual?.altText||'');setVisualVerified(false);
   }
-  function close(){if((editorDirty||saving)&&!window.confirm('Discard the unsaved changes to this question?'))return;setEditing(null);setEditorDirty(false);setImageFile(null);setRemoveImage(false);}
+  function close(){if((editorDirty||saving||ocrBusy)&&!window.confirm('Discard the unsaved changes or local OCR work for this question?'))return;setEditing(null);setEditorDirty(false);setImageFile(null);setRemoveImage(false);}
   function changeVisual(next:()=>void){next();setVisualVerified(false);setEditorDirty(true);}
 
   async function save(event:FormEvent<HTMLFormElement>){
@@ -75,13 +78,13 @@ export function PublishedPaperReview({initial,status}:{initial:PublishedQuestion
       {editing.type!=='tita'&&<label>Options <small>One option per line</small><textarea name="options" defaultValue={json(editing.options_json).join('\n')} required/></label>}
       <label>Correct answer{editing.type==='multi'&&'s'} <small>Exact option text; one answer per line</small><textarea name="answers" defaultValue={json(editing.answers_json).join('\n')} required/></label><label>Solution<textarea name="solution" defaultValue={editing.solution}/></label>
       <section className="visual-builder"><div className="visual-builder-head"><div><span>Supporting visual · no image storage needed</span><small>Choose a format and paste verified data. Nothing is sent to an AI service.</small></div>{visualKind&&<button type="button" onClick={()=>changeVisual(()=>{setVisualKind('');setVisualSource('');setVisualAltText('');})}>Remove visual</button>}</div>
-        <label>Visual type<select value={visualKind} onChange={(event)=>changeVisual(()=>setVisualKind(event.target.value))}><option value="">None · text-only question</option>{visualKinds.map((kind)=><option value={kind} key={kind}>{kind==='flowchart'?'Flow diagram':kind[0].toUpperCase()+kind.slice(1)}</option>)}</select></label>
-        {visualKind&&<><label>{help.label}<small>{help.help}</small><textarea value={visualSource} placeholder={help.placeholder} onChange={(event)=>changeVisual(()=>setVisualSource(event.target.value))}/></label><label>Describe the visual in words <small>Required for accessibility and as a fallback on very small screens.</small><textarea value={visualAltText} placeholder="State the pattern and all information needed to answer the question." onChange={(event)=>changeVisual(()=>setVisualAltText(event.target.value))}/></label>
+        <label>Visual type<select value={visualKind} disabled={ocrBusy} onChange={(event)=>changeVisual(()=>setVisualKind(event.target.value))}><option value="">None · text-only question</option>{visualKinds.map((kind)=><option value={kind} key={kind}>{kind==='flowchart'?'Flow diagram':kind[0].toUpperCase()+kind.slice(1)}</option>)}</select></label>
+        {visualKind&&<><LocalOcrAssistant visualKind={visualKind as VisualKind} onBusyChange={setOcrBusy} onUseDraft={(source)=>changeVisual(()=>setVisualSource(source))}/><label>{help.label}<small>{help.help}</small><textarea value={visualSource} placeholder={help.placeholder} onChange={(event)=>changeVisual(()=>setVisualSource(event.target.value))}/></label><label>Describe the visual in words <small>Required for accessibility and as a fallback on very small screens.</small><textarea value={visualAltText} placeholder="State the pattern and all information needed to answer the question." onChange={(event)=>changeVisual(()=>setVisualAltText(event.target.value))}/></label>
           <div className={`visual-preview ${draft.error?'has-error':''}`}><strong>Candidate preview</strong>{draft.error?<p>{draft.error}</p>:<StructuredVisual visual={draft.visual}/>}</div>
           <label className="visual-confirm"><input type="checkbox" checked={visualVerified} onChange={(event)=>{setVisualVerified(event.target.checked);setEditorDirty(true);}}/> I checked the preview, every value and the written description against the original source.</label></>}
       </section>
       <div className="paper-image-editor"><span>Original image storage · optional later</span><small>{editing.image_key?'A protected R2 image is currently attached. You can retain, replace or remove it.':'R2 is postponed. Use the structured visual builder above for tables, charts, flows and equations.'}</small>{editing.image_key&&<><input name="replacementImage" type="file" accept="image/png,image/jpeg" onChange={(event)=>{setImageFile(event.target.files?.[0]||null);setRemoveImage(false);setEditorDirty(true);}}/><label><input type="checkbox" checked={removeImage} onChange={(event)=>{setRemoveImage(event.target.checked);if(event.target.checked)setImageFile(null);setEditorDirty(true);}}/> Remove the current image</label></>}</div>
-      <div className="paper-edit-grid"><label>Marks<input name="marks" type="number" min="0.01" step="0.01" defaultValue={editing.marks} required/></label><label>Negative marks<input name="negativeMarks" type="number" min="0" step="0.01" defaultValue={editing.negative_marks}/></label><label>Topic<input name="topic" defaultValue={editing.topic}/></label><label>Subtopic <small>Optional</small><input name="subtopic" defaultValue={editing.subtopic}/></label><label>Difficulty<select name="difficulty" defaultValue={editing.difficulty}><option>easy</option><option>medium</option><option>hard</option></select></label></div><button className="solid-action" disabled={saving||Boolean(visualChanged&&visualKind&&(!visualVerified||draft.error))}>{saving?'Saving question…':'Save question & visual'}</button>
+      <div className="paper-edit-grid"><label>Marks<input name="marks" type="number" min="0.01" step="0.01" defaultValue={editing.marks} required/></label><label>Negative marks<input name="negativeMarks" type="number" min="0" step="0.01" defaultValue={editing.negative_marks}/></label><label>Topic<input name="topic" defaultValue={editing.topic}/></label><label>Subtopic <small>Optional</small><input name="subtopic" defaultValue={editing.subtopic}/></label><label>Difficulty<select name="difficulty" defaultValue={editing.difficulty}><option>easy</option><option>medium</option><option>hard</option></select></label></div><button className="solid-action" disabled={saving||ocrBusy||Boolean(visualChanged&&visualKind&&(!visualVerified||draft.error))}>{saving?'Saving question…':ocrBusy?'Wait for local OCR…':'Save question & visual'}</button>
     </form></div>}
   </section>;
 }
