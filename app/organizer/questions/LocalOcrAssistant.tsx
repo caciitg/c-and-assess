@@ -46,7 +46,7 @@ export function LocalOcrAssistant({visualKind,onUseDraft,onBusyChange}:Props){
     let worker:Worker|null=null;
     try{
       const {createWorker}=await import('tesseract.js');
-      worker=await createWorker('eng',undefined,{workerPath:'/ocr/worker.min.js',corePath:'/ocr/core',langPath:'/ocr/lang',logger:(message)=>{
+      worker=await createWorker('eng',undefined,{workerPath:'/ocr/worker.min.js',workerBlobURL:false,corePath:'/ocr/core',langPath:'/ocr/lang',logger:(message)=>{
         if(!mountedRef.current)return;
         const fraction=typeof message.progress==='number'?message.progress:0;
         setProgress(Math.max(0,Math.min(100,Math.round(fraction*100))));
