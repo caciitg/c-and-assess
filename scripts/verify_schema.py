@@ -6,7 +6,7 @@ import tempfile
 database_path = pathlib.Path(tempfile.gettempdir()) / "c-and-assess-schema-test.db"
 database_path.unlink(missing_ok=True)
 connection = sqlite3.connect(database_path)
-for migration in ("drizzle/0000_initial.sql", "drizzle/0001_assessment_lifecycle.sql", "drizzle/0002_candidate_engine.sql", "drizzle/0003_result_analytics.sql", "drizzle/0004_result_jobs.sql"):
+for migration in ("drizzle/0000_initial.sql", "drizzle/0001_assessment_lifecycle.sql", "drizzle/0002_candidate_engine.sql", "drizzle/0003_result_analytics.sql", "drizzle/0004_result_jobs.sql", "drizzle/0005_structured_visuals.sql"):
     sql = pathlib.Path(migration).read_text(encoding="utf-8").replace("--> statement-breakpoint", "")
     connection.executescript(sql)
 
@@ -18,6 +18,8 @@ required_tables = {
 assert required_tables <= tables, required_tables - tables
 assessment_columns = {row[1] for row in connection.execute("PRAGMA table_info(assessments)")}
 assert {"paper_version", "question_count", "total_marks", "registration_ends_at"} <= assessment_columns
+question_columns = {row[1] for row in connection.execute("PRAGMA table_info(questions)")}
+assert {"visual_kind", "visual_spec_json", "visual_alt_text"} <= question_columns
 attempt_columns = {row[1] for row in connection.execute("PRAGMA table_info(attempts)")}
 assert {"paper_version", "answer_version", "result_json", "max_score", "scored_at", "time_spent_json", "excluded_at", "evaluation_version"} <= attempt_columns
 attempt_sql = """INSERT INTO attempts (id,assessment_id,user_id,status,result_json,score,max_score,correct_count,incorrect_count,unattempted_count,started_at,expires_at,submitted_at,updated_at) VALUES (?,?,?,'submitted',?,?,?,?,?,?,100,500,?,500)"""

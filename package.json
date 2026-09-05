@@ -8,35 +8,40 @@
   },
   "scripts": {
     "dev": "vinext dev",
+    "prebuild": "node scripts/prepare_ocr_assets.mjs",
     "build": "vinext build",
     "start": "vinext start",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
     "typecheck": "tsc --noEmit",
     "db:generate": "drizzle-kit generate",
     "test:scoring": "node --experimental-strip-types scripts/verify_scoring.mjs",
+    "test:visuals": "node --experimental-strip-types scripts/verify_structured_visuals.mjs",
+    "test:ocr": "node --experimental-strip-types scripts/verify_ocr_visual_drafts.mjs",
     "test:schema": "python scripts/verify_schema.py",
     "test:load": "node --experimental-strip-types scripts/load_test_results.ts",
     "test:load:http": "node scripts/load_test_http.mjs",
-    "check": "npm run typecheck && npm run lint && npm run test:scoring && npm run test:schema && npm run build"
+    "check": "npm run typecheck && npm run lint && npm run test:scoring && npm run test:visuals && npm run test:ocr && npm run test:schema && npm run build"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Hermes-25/c-and-assess.git"
+    "url": "git+https://github.com/caciitg/c-and-assess.git"
   },
   "homepage": "https://assess.caciitg.com",
   "bugs": {
-    "url": "https://github.com/Hermes-25/c-and-assess/issues"
+    "url": "https://github.com/caciitg/c-and-assess/issues"
   },
   "author": "Abhishek Das",
   "license": "MIT",
   "dependencies": {
+    "@tesseract.js-data/eng": "^1.0.0",
     "@types/papaparse": "^5.5.2",
     "drizzle-orm": "0.45.2",
     "jszip": "^3.10.1",
     "next": "^16.3.3",
     "papaparse": "^5.7.0",
     "react": "19.2.8",
-    "react-dom": "19.2.8"
+    "react-dom": "19.2.8",
+    "tesseract.js": "^7.0.0"
   },
   "devDependencies": {
     "@cloudflare/vite-plugin": "1.54.2",

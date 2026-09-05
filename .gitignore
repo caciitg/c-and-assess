@@ -41,6 +41,7 @@ yarn-error.log*
 .vercel
 next-env.d.ts
 /dist/
+/public/ocr/
 /.wrangler/
 /.wrangler-config/
 /.npm-cache/

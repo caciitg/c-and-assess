@@ -9,9 +9,18 @@ The official deployment source is `caciitg/c-and-assess`. The personal `Hermes-2
 ## What organizers can use
 
 - Text questions and text answer options, uploaded through CSV.
+- Responsive tables, bar/line/pie/scatter charts, flow diagrams and equations created with the structured visual editor after CSV publishing.
 - Registration, timed attempts, submission, scoring, results and analysis.
 - Leave every CSV `Image` cell blank. Image ZIP uploads and image references are not supported in this release.
 - The server rejects image-bearing imports rather than silently dropping images or publishing an incomplete paper.
+
+### No-cost structured visuals
+
+After publishing a text-only CSV, open the published paper, choose **Edit question & visual**, and select a visual type. Paste rows copied from a spreadsheet, simple `Step -> Step` flow lines, or an equation. A candidate preview appears before saving.
+
+The organizer can also paste, drop or choose a clean chart/table image in the **local OCR assistant**. Tesseract.js reads it inside the browser and proposes editable rows; the image is never uploaded or saved. The free OCR engine and English model are served by C&Assess itself and cached by the browser, so no external inference service receives the image. OCR is only a starting point: the organizer must correct the draft, add a written description, compare the candidate preview with the source, and confirm every value before saving. The platform stores only the approved text/JSON in D1 and renders the visual itself.
+
+This works best for clean, high-resolution tables and common charts with readable labels. OCR may confuse digits, signs, decimal points, mathematical symbols, column order or arrows. It is not a safe substitute for maps, photographs, geometry figures, circuit diagrams, dense infographics or any question where exact visual placement is part of the reasoning. Recreate those manually in a supported format or defer them until private R2 image storage is enabled.
 
 Keep `CLOUDFLARE_R2_BUCKET` unset in both GitHub environments. The configuration renderer removes inherited R2 bindings. Keep Workers Free; no automatic paid upgrade is authorized.
 
