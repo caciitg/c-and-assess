@@ -39,7 +39,7 @@ const sections = [
   {
     title: 'Where information is processed',
     paragraphs: [
-      'C&Assess uses Google for sign-in and Cloudflare infrastructure for application delivery, structured records and question-image storage. These providers process limited information on our behalf under their own security and privacy terms.',
+      'C&Assess uses Google for sign-in and Cloudflare infrastructure for application delivery and structured assessment records. Images selected for browser-side OCR are processed locally in the organizer’s browser; the original image is not uploaded or stored by the current text-only release.',
       'We do not sell candidate information or use assessment answers for advertising. We do not give individual results to other candidates. Organizers with approved access can view records required to operate and evaluate an assessment.',
     ],
   },
@@ -67,6 +67,5 @@ const sections = [
 ];
 
 export default function PrivacyPage() {
-  return <LegalPage eyebrow="Your information" title="Privacy notice" summary="A plain-language explanation of what C&Assess records, why it is needed and the choices available to candidates." updated="3 September 2026" sections={sections} />;
+  return <LegalPage eyebrow="Your information" title="Privacy notice" summary="A plain-language explanation of what C&Assess records, why it is needed and the choices available to candidates." updated="5 September 2026" sections={sections} />;
 }
-
