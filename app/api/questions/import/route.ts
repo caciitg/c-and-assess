@@ -16,7 +16,7 @@ export async function GET(request: Request) {
   if (!assessmentId) return Response.json({ error: 'Assessment is required.' }, { status: 400 });
   const assessment = await editableAssessment(assessmentId);
   if (!assessment) return Response.json({ error: 'Assessment not found.' }, { status: 404 });
-  const questions = await env.DB.prepare(`SELECT id, position, type, prompt, passage, options_json, answers_json, solution, marks, negative_marks, topic, subtopic, difficulty, image_key
+  const questions = await env.DB.prepare(`SELECT id, position, type, prompt, passage, options_json, answers_json, solution, marks, negative_marks, topic, subtopic, difficulty, image_key, visual_kind, visual_spec_json, visual_alt_text
     FROM questions WHERE assessment_id = ? AND is_active = 1 ORDER BY position LIMIT 250`).bind(assessmentId).all();
   const latestImport = await env.DB.prepare(`SELECT id, source_filename, status, expected_rows, staged_rows, created_at, committed_at
     FROM question_imports WHERE assessment_id = ? ORDER BY created_at DESC LIMIT 1`).bind(assessmentId).first();
@@ -124,7 +124,7 @@ export async function POST(request: Request) {
         SELECT lower(hex(randomblob(16))), assessment_id, ?, id, position,
           json_object('type',type,'prompt',prompt,'sectionId',section_id,'passage',passage,'options',options_json,'answers',answers_json,
             'solution',solution,'marks',marks,'negativeMarks',negative_marks,'keywords',answer_keywords_json,'keywordMarks',keyword_marks,
-            'imageKey',image_key,'durationSeconds',duration_seconds,'tag',tag,'topic',topic,'subtopic',subtopic,'source',source,
+            'imageKey',image_key,'visualKind',visual_kind,'visualSpecJson',visual_spec_json,'visualAltText',visual_alt_text,'durationSeconds',duration_seconds,'tag',tag,'topic',topic,'subtopic',subtopic,'source',source,
             'acceptedVariants',accepted_variants_json,'titaTolerance',tita_tolerance,'difficulty',difficulty), ?
         FROM questions WHERE assessment_id = ?`).bind(Number(assessment.paper_version || 0), now, body.assessmentId),
       env.DB.prepare('DELETE FROM questions WHERE assessment_id = ?').bind(body.assessmentId),

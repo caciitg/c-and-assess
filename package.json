@@ -14,10 +14,11 @@
     "typecheck": "tsc --noEmit",
     "db:generate": "drizzle-kit generate",
     "test:scoring": "node --experimental-strip-types scripts/verify_scoring.mjs",
+    "test:visuals": "node --experimental-strip-types scripts/verify_structured_visuals.mjs",
     "test:schema": "python scripts/verify_schema.py",
     "test:load": "node --experimental-strip-types scripts/load_test_results.ts",
     "test:load:http": "node scripts/load_test_http.mjs",
-    "check": "npm run typecheck && npm run lint && npm run test:scoring && npm run test:schema && npm run build"
+    "check": "npm run typecheck && npm run lint && npm run test:scoring && npm run test:visuals && npm run test:schema && npm run build"
   },
   "repository": {
     "type": "git",

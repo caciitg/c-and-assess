@@ -9,9 +9,18 @@ The official deployment source is `caciitg/c-and-assess`. The personal `Hermes-2
 ## What organizers can use
 
 - Text questions and text answer options, uploaded through CSV.
+- Responsive tables, bar/line/pie/scatter charts, flow diagrams and equations created with the structured visual editor after CSV publishing.
 - Registration, timed attempts, submission, scoring, results and analysis.
 - Leave every CSV `Image` cell blank. Image ZIP uploads and image references are not supported in this release.
 - The server rejects image-bearing imports rather than silently dropping images or publishing an incomplete paper.
+
+### No-cost structured visuals
+
+After publishing a text-only CSV, open the published paper, choose **Edit question & visual**, and select a visual type. Paste rows copied from a spreadsheet, simple `Step -> Step` flow lines, or an equation. A candidate preview appears before saving.
+
+The organizer must add a written description and confirm that every value matches the source. This check is mandatory because there is no LLM, OCR or automatic image interpretation in the release. The platform stores only small validated text/JSON fields in D1 and renders the visual itself. It never uploads the organizer's source image.
+
+This works well for simple tables, common charts, process flows and readable equations. It is not a safe substitute for maps, photographs, geometry figures, circuit diagrams, dense infographics or any question where exact visual placement is part of the reasoning. Recreate those manually in a supported format or defer them until private R2 image storage is enabled.
 
 Keep `CLOUDFLARE_R2_BUCKET` unset in both GitHub environments. The configuration renderer removes inherited R2 bindings. Keep Workers Free; no automatic paid upgrade is authorized.
 
