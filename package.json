@@ -24,11 +24,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Hermes-25/c-and-assess.git"
+    "url": "git+https://github.com/caciitg/c-and-assess.git"
   },
   "homepage": "https://assess.caciitg.com",
   "bugs": {
-    "url": "https://github.com/Hermes-25/c-and-assess/issues"
+    "url": "https://github.com/caciitg/c-and-assess/issues"
   },
   "author": "Abhishek Das",
   "license": "MIT",
