@@ -88,7 +88,7 @@ flowchart TB
 
 The current public release uses an OpenAI Sites-managed Cloudflare runtime, D1 binding and object-storage binding. The locked target is a club-owned Worker deployed from this repository by GitHub Actions, backed by club D1 and optional private R2. R2 billing is deferred: the club staging configuration supports text-only papers until storage is approved. The live cutover remains gated by secrets, data migration, backup, monitoring and final-infrastructure rehearsal. See [Free-tier operation](docs/FREE_TIER.md), [Architecture](docs/ARCHITECTURE.md), [Deployment](docs/SETUP_AND_DEPLOYMENT.md) and the [cutover runbook](docs/DEPLOYMENT_CUTOVER.md).
 
-## What I engineered
+## What has been engineered
 
 - **End-to-end product:** candidate, organizer, assessment, submission and results journeys in one application.
 - **Database lifecycle:** versioned SQL migrations and a schema covering users, assessment rules, question versions, registrations, attempts, audit events, result jobs and analytics.
@@ -111,18 +111,6 @@ The current public release uses an OpenAI Sites-managed Cloudflare runtime, D1 b
 | Identity | Google OAuth 2.0 | Familiar sign-in without another password database |
 | Import | Papa Parse + JSZip | Spreadsheet-friendly paper publishing with image bundles |
 | Quality | ESLint, TypeScript, schema/scoring tests, GitHub Actions | Repeatable checks on every change |
-
-## AI: where it helped—and where it does not sit
-
-This was an **AI-assisted product engineering project**, not a thin wrapper around an API.
-
-- AI was used as a design and engineering collaborator for product decomposition, interface critique, implementation support, test planning and documentation.
-- Every generated suggestion was reviewed against the source, exercised in the browser and checked with repeatable build/test commands.
-- The production scoring path does **not** call an LLM. Marks, ranks and percentiles remain reproducible.
-- Personal recommendations currently use transparent rules derived from accuracy, attempt rate, difficulty and time behaviour.
-- A future optional LLM layer can explain those already-computed facts in more natural language, but it must never change marks or block result publication.
-
-Read the full [AI-assisted development note](docs/AI_ASSISTED_DEVELOPMENT.md), including safeguards against hallucinated logic and hidden evaluation changes.
 
 ## Evidence, not theatre
 
