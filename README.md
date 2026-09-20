@@ -33,8 +33,6 @@ Candidates get a focused timed interface, recovery-friendly autosave, transparen
 
 It was built under a demanding constraint: deliver the core experience of costly assessment products while keeping mandatory infrastructure cost near zero for controlled club pilots.
 
-> Built by **[Abhishek Das](https://www.linkedin.com/in/abhishek-das-iitg/)** for the **[Consulting & Analytics Club, IIT Guwahati](https://caciitg.com)**. Maintained with the C&A Team.
-
 ## Why this project matters
 
 Most student assessment workflows break into forms, spreadsheets, manual scoring and scattered result messages. C&Assess connects the whole lifecycle:
@@ -189,6 +187,7 @@ C&Assess is ready for controlled pilots and further club development. It is not 
 
 The application code is available under the [MIT Licence](LICENSE). The C&A name, logo and brand artwork remain the property of the Consulting & Analytics Club, IIT Guwahati and are not granted for unrelated use by the software licence; see [NOTICE](NOTICE.md).
 
-Built by **Abhishek Das** for the **Consulting & Analytics Club, IIT Guwahati**.
 
-[LinkedIn](https://www.linkedin.com/in/abhishek-das-iitg/) · [Portfolio](https://das-abhishek.vercel.app/) · [Email](mailto:work.abhishekdas@gmail.com)
+> Built by **[Abhishek Das](https://www.linkedin.com/in/abhishek-das-iitg/)** for the **[Consulting & Analytics Club, IIT Guwahati](https://caciitg.com)**.
+> Maintained with the C&A Team.
+
